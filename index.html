@@ -371,6 +371,24 @@ const EXAM_TIME = 600;
 
 function shuffle(arr){
   return arr.sort(() => Math.random() - 0.5);
+    
+
+
+function generateBetterOptions(bank){
+    return bank.map((q, i) => {
+
+        let wrongPool = bank
+            .filter((_, idx) => idx !== i)
+            .map(item => item.c);
+
+        wrongPool = shuffle(wrongPool).slice(0,3);
+
+        return {
+            q: q.q,
+            c: q.c,
+            options: shuffle([q.c, ...wrongPool])
+        };
+    });
 }
 // ==========================
 // 🎯 QUIZ ҮҮСГЭХ
@@ -379,11 +397,7 @@ function shuffle(arr){
 let quiz = [];
 
 function generateQuiz(){
-
-  // 1. сайжруулсан асуултууд үүсгэнэ
-  let improvedBank = generateBetterOptions(bank);
-
-  // 2. random 20 асуулт сонгоно
+ let improvedBank = generateBetterOptions(bank);
   quiz = shuffle([...improvedBank])
     .slice(0, TOTAL_QUESTIONS)
     .map(q => ({
