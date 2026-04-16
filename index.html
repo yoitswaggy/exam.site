@@ -369,8 +369,24 @@ const EXAM_TIME = 600;
 // 🔧 FUNCTION
 // ==========================
 
-function shuffle(arr){
-    return arr.sort(() => Math.random() - 0.5);
+}function shuffle(arr){
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+function generateBetterOptions(bank){
+  return bank.map((q, i) => {
+    let wrongPool = bank
+      .filter((_, idx) => idx !== i)
+      .map(item => item.c);
+
+    wrongPool = shuffle(wrongPool).slice(0,3);
+
+    return {
+      q: q.q,
+      c: q.c,
+      options: shuffle([q.c, ...wrongPool])
+    };
+  });
 }
 
 // ==========================
@@ -384,9 +400,15 @@ function generateQuiz(){
         .slice(0, TOTAL_QUESTIONS)
         .map(q => ({
             question: q.q,
-            answers: shuffle([q.c, ...q.w]),
-            correct: q.c
-        }));
+            let improvedBank = generateBetterOptions(bank);
+
+quiz = shuffle([...improvedBank])
+  .slice(0, TOTAL_QUESTIONS)
+  .map(q => ({
+    question: q.q,
+    answers: q.options,
+    correct: q.c
+  }));
 }
 
 // ==========================
