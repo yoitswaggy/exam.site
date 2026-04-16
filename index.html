@@ -358,16 +358,10 @@ const bank = [
 
 
 
-// ==========================
-// ⚙️ ТОХИРУУЛГА
-// ==========================
 
 const TOTAL_QUESTIONS = 20;
 const EXAM_TIME = 600;
 
-// ==========================
-// 🔧 FUNCTION
-// ==========================
 
 function shuffle(arr){
   return arr.sort(() => Math.random() - 0.5);
@@ -395,11 +389,6 @@ wrongPool = shuffle(wrongPool).slice(0,3);
             options: shuffle([q.c, ...wrongPool])
         };
     });
-}
-// ==========================
-// 🎯 QUIZ ҮҮСГЭХ
-// ==========================
-
 let quiz = [];
 
 function generateQuiz(){
@@ -414,17 +403,11 @@ function generateQuiz(){
 }
 
 
-// ==========================
-// 🧠 STATE
-// ==========================
 
 let current = 0;
 let score = 0;
 let answered = false;
 
-// ==========================
-// ⏱ TIMER
-// ==========================
 
 let timeLeft = EXAM_TIME;
 
@@ -447,9 +430,6 @@ function startTimer(){
     }, 1000);
 }
 
-// ==========================
-// UI
-// ==========================
 
 function loadQuestion(){
     answered = false;
@@ -479,7 +459,6 @@ function selectAnswer(ans, btn){
     } else {
         btn.style.background = "salmon";
     }
-}
 
 function nextQuestion(){
     if(!answered){
@@ -494,7 +473,6 @@ function nextQuestion(){
     } else {
         finishExam();
     }
-}
 
 function finishExam(){
     document.getElementById("question").innerText = "🎉 Дууслаа!";
@@ -503,12 +481,7 @@ function finishExam(){
         `Оноо: ${score} / ${quiz.length}`;
 }
 
-// ==========================
-// 🚀 START
-// ==========================
-
 generateQuiz();
-console.log("QUIZ:", quiz);
 loadQuestion();
 startTimer();
 
