@@ -396,11 +396,19 @@ function generateBetterOptions(bank){
 let quiz = [];
 
 function generateQuiz(){
-    quiz = shuffle([...bank])
-        .slice(0, TOTAL_QUESTIONS)
-        .map(q => ({
-            question: q.q,
-            let improvedBank = generateBetterOptions(bank);
+
+  // 1. сайжруулсан асуултууд үүсгэнэ
+  let improvedBank = generateBetterOptions(bank);
+
+  // 2. random 20 асуулт сонгоно
+  quiz = shuffle([...improvedBank])
+    .slice(0, TOTAL_QUESTIONS)
+    .map(q => ({
+      question: q.q,
+      answers: q.options,
+      correct: q.c
+    }));
+}
 
 quiz = shuffle([...improvedBank])
   .slice(0, TOTAL_QUESTIONS)
