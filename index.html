@@ -410,14 +410,6 @@ function generateQuiz(){
     }));
 }
 
-quiz = shuffle([...improvedBank])
-  .slice(0, TOTAL_QUESTIONS)
-  .map(q => ({
-    question: q.q,
-    answers: q.options,
-    correct: q.c
-  }));
-}
 
 // ==========================
 // 🧠 STATE
