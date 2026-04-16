@@ -372,26 +372,6 @@ const EXAM_TIME = 600;
 function shuffle(arr){
   return arr.sort(() => Math.random() - 0.5);
 }
-
-function generateQuiz(){
-  quiz = shuffle([...bank])
-    .slice(0, TOTAL_QUESTIONS)
-    .map((q, i) => {
-
-      let wrongPool = bank
-        .filter((_, idx) => idx !== i)
-        .map(item => item.c);
-
-      wrongPool = shuffle(wrongPool).slice(0,3);
-
-      return {
-        question: q.q,
-        answers: shuffle([q.c, ...wrongPool]),
-        correct: q.c
-      };
-    });
-}
-
 // ==========================
 // 🎯 QUIZ ҮҮСГЭХ
 // ==========================
