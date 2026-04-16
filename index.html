@@ -377,11 +377,17 @@ function shuffle(arr){
 function generateBetterOptions(bank){
     return bank.map((q, i) => {
 
-        let wrongPool = bank
-            .filter((_, idx) => idx !== i)
-            .map(item => item.c);
+        let wrongPool = [...q.w];
 
-        wrongPool = shuffle(wrongPool).slice(0,3);
+        if (wrongPool.length < 3) {
+         let extra = bank
+          .filter((_, idx) => idx !== i)
+          .map(item => item.c);
+
+  wrongPool = [...wrongPool, ...extra];
+}
+
+wrongPool = shuffle(wrongPool).slice(0,3);
 
         return {
             q: q.q,
