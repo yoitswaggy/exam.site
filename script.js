@@ -1,41 +1,62 @@
-const bank = [
-  { q: "1+1=?", c: "2", w: ["1","3","4"] },
-  { q: "2+2=?", c: "4", w: ["2","3","5"] },
-  { q: "Монгол улсын нийслэл?", c: "Улаанбаатар", w: ["Дархан","Ховд","Эрдэнэт"] }
-];
-
-const TOTAL_QUESTIONS = 3;
+const TOTAL_QUESTIONS = 20;
+const EXAM_TIME = 600;
 
 function shuffle(arr){
   return arr.sort(() => Math.random() - 0.5);
 }
 
-let quiz = [];
-let current = 0;
-let score = 0;
-let answered = false;
+function generateBetterOptions(bank){
+  return bank.map((q, i) => {
+    let wrongPool = [...q.w];
 
-function generateQuiz(){
-  quiz = shuffle([...bank]).slice(0, TOTAL_QUESTIONS).map(q => {
-    let wrong = shuffle([...q.w]).slice(0,3);
+    if (wrongPool.length < 3) {
+      let extra = bank
+        .filter((_, idx) => idx !== i)
+        .map(item => item.c);
+
+      wrongPool = [...wrongPool, ...extra];
+    }
+
+    wrongPool = shuffle(wrongPool).slice(0,3);
+
     return {
-      question: q.q,
-      answers: shuffle([q.c, ...wrong]),
-      correct: q.c
+      q: q.q,
+      c: q.c,
+      options: shuffle([q.c, ...wrongPool])
     };
   });
 }
 
+let quiz = [];
+
+function generateQuiz(){
+  let improvedBank = generateBetterOptions(bank);
+
+  quiz = shuffle([...improvedBank])
+    .slice(0, TOTAL_QUESTIONS)
+    .map(q => ({
+      question: q.q,
+      answers: q.options,
+      correct: q.c
+    }));
+}
+
+let current = 0;
+let score = 0;
+let answered = false;
+
 function loadQuestion(){
   answered = false;
+
   let q = quiz[current];
 
   document.getElementById("question").innerText =
-    `${current+1}. ${q.question}`;
+    `${current + 1}. ${q.question}`;
 
   let html = "";
+
   q.answers.forEach(ans => {
-    html += `<button onclick="selectAnswer('${ans}', this)">${ans}</button>`;
+    html += `<button onclick="selectAnswer(this.textContent, this)">${ans}</button>`;
   });
 
   document.getElementById("answers").innerHTML = html;
@@ -66,10 +87,8 @@ function nextQuestion(){
     loadQuestion();
   } else {
     document.getElementById("question").innerText = "Дууслаа!";
-    document.getElementById("answers").innerHTML = "";
   }
 }
 
-// START
 generateQuiz();
 loadQuestion();
